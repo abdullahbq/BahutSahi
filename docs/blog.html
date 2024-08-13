@@ -1,21 +1,26 @@
 
         <html>
         <head>
-            <title>Archives</title>
+            <title>Blog</title>
             <link href="css/bootstrap.min.css" rel="stylesheet">
             <style>
                 .card { border: 1px solid #ddd; border-radius: 8px; }
-                .card-title { font-weight: bold; }
-                .card-text a { text-decoration: none; }
+                .card-title a { text-decoration: none; color: #007bff; }
+                .card-title a:hover { text-decoration: underline; }
+                .card-body { padding: 20px; }
+                .card-text { font-size: 0.9rem; }
             </style>
         </head>
         <body class="d-flex flex-column min-vh-100">
             
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">MyWebsite</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+        <a class="navbar-brand" href="index.html">MyWebsite</a>        
+        <button class="btn btn-outline-light d-lg-none me-auto" id="toggle-sidebar">
+            <i class="bi bi-list"></i> Sidebar
+        </button>
+        <button class="btn btn-outline-light d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list"></i> Menu
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
@@ -46,25 +51,42 @@
 </nav>
 
             <div class="container mt-4">
-                <h1>Archives</h1>
+                <h1>Blog</h1>
                 <div class="row">
-                    <div class="col-md-12">
-                        
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">August 2024</h5>
-                    <p class="card-text"><a href="post1.html">Introduction to Precision Agriculture</a><br><a href="post2.html">Understanding IoT in Smart Homes</a></p>
-                </div>
-            </div>
-        
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">September 2024</h5>
-                    <p class="card-text"><a href="post3.html">The Role of Artificial Intelligence in Healthcare</a></p>
-                </div>
-            </div>
-        
+                    
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="post1.html">Introduction to Precision Agriculture</a></h5>
+                        <small class="text-muted">Published on: 1/8/2024</small>
+                        <small class="text-muted">Tags: Agriculture, Technology, IoT</small>
+                        <p class="card-text">An overview of how precision agriculture is transforming modern farming through the use of technology and IoT.</p>
                     </div>
+                </div>
+            </div>
+        
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="post2.html">Understanding IoT in Smart Homes</a></h5>
+                        <small class="text-muted">Published on: 5/8/2024</small>
+                        <small class="text-muted">Tags: IoT, Smart Homes, Technology</small>
+                        <p class="card-text">Exploring how the Internet of Things (IoT) is revolutionizing the way we interact with our homes.</p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="post3.html">The Role of Artificial Intelligence in Healthcare</a></h5>
+                        <small class="text-muted">Published on: 10/9/2024</small>
+                        <small class="text-muted">Tags: AI, Healthcare, Technology</small>
+                        <p class="card-text">A look into how artificial intelligence is improving patient care and diagnostics in the healthcare industry.</p>
+                    </div>
+                </div>
+            </div>
+        
                 </div>
             </div>
             

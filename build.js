@@ -6,7 +6,7 @@ const frontMatter = require('front-matter');
 // Directories
 const docsDir = path.join(__dirname, 'contents', 'docs');
 const blogDir = path.join(__dirname, 'contents', 'blog');
-const publicDir = path.join(__dirname, 'public');
+const publicDir = path.join(__dirname, 'docs');
 
 // Create public directory if it doesn't exist
 if (!fs.existsSync(publicDir)) {
@@ -17,9 +17,12 @@ if (!fs.existsSync(publicDir)) {
 const navbar = `
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">MyWebsite</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+        <a class="navbar-brand" href="index.html">MyWebsite</a>        
+        <button class="btn btn-outline-light d-lg-none me-auto" id="toggle-sidebar">
+            <i class="bi bi-list"></i> Sidebar
+        </button>
+        <button class="btn btn-outline-light d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list"></i> Menu
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
@@ -120,7 +123,7 @@ function convertMarkdownToHTML(dir, outputDir, isDocumentation) {
                 <title>${attributes.title}</title>
                 <link href="css/bootstrap.min.css" rel="stylesheet">
             </head>
-            <body>
+            <body class="d-flex flex-column min-vh-100">
                 ${navbar}
                 <div class="container mt-4">                
                     ${metadataSection}
@@ -200,12 +203,29 @@ function generateDocumentationPage(dir, outputFilePath) {
                     padding: 15px;
                     background-color: #ffffff;
                 }
+                /* Responsive styles */
+                @media (max-width: 992px) {
+                    .sidebar {
+                        display: none;
+                        width: 100%;
+                        padding: 15px;
+                    }
+                    .docs-container-fluid {
+                        flex-direction: column;
+                    }
+                    .content {
+                        width: 100%;
+                    }
+                }
+                .sidebar.show {
+                    display: block;
+                }
             </style>
         </head>
         <body class="d-flex flex-column min-vh-100">
             ${navbar}
             <div class="docs-container-fluid mt-4">
-                <div class="sidebar">
+                <div class="sidebar" id="sidebar">
                     <h2>Documentation</h2>
                     <ul class="list-group">
                         ${listItems}
@@ -220,6 +240,11 @@ function generateDocumentationPage(dir, outputFilePath) {
             ${footer}
             <script src="js/bootstrap.bundle.min.js"></script>
             <script>
+                // Sidebar toggle for small screens
+                document.getElementById('toggle-sidebar').addEventListener('click', function() {
+                    document.getElementById('sidebar').classList.toggle('show');
+                });
+
                 document.querySelectorAll('.doc-link').forEach(link => {
                     link.addEventListener('click', function(event) {
                         event.preventDefault();
@@ -239,7 +264,6 @@ function generateDocumentationPage(dir, outputFilePath) {
 
     fs.writeFileSync(outputFilePath, html);
 }
-
 
 // Generate the blog page with a list of cards for each blog post
 function generateBlogPage(dir, outputFilePath, title) {

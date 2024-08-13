@@ -1,16 +1,24 @@
 
         <html>
         <head>
-            <title>About Us</title>
+            <title>Archives</title>
             <link href="css/bootstrap.min.css" rel="stylesheet">
+            <style>
+                .card { border: 1px solid #ddd; border-radius: 8px; }
+                .card-title { font-weight: bold; }
+                .card-text a { text-decoration: none; }
+            </style>
         </head>
         <body class="d-flex flex-column min-vh-100">
             
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">MyWebsite</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+        <a class="navbar-brand" href="index.html">MyWebsite</a>        
+        <button class="btn btn-outline-light d-lg-none me-auto" id="toggle-sidebar">
+            <i class="bi bi-list"></i> Sidebar
+        </button>
+        <button class="btn btn-outline-light d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list"></i> Menu
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
@@ -41,25 +49,26 @@
 </nav>
 
             <div class="container mt-4">
-                <h1>About Us</h1>
-                <div><div>
-    <h2>Our Mission</h2>
-    <p>At MyWebsite, our mission is to deliver high-quality content and services that inspire, inform, and engage our
-        audience. We are committed to providing value through innovative solutions and dedicated support.</p>
-
-    <h2>Our Team</h2>
-    <p>Our team is composed of passionate professionals with diverse backgrounds and expertise. Each member brings
-        unique skills and perspectives, working collaboratively to achieve our goals and serve our community
-        effectively.</p>
-
-    <h2>Our Values</h2>
-    <p>We believe in integrity, excellence, and innovation. Our values guide our actions and decisions, ensuring that we
-        consistently meet the highest standards in everything we do.</p>
-
-    <h2>Contact Us</h2>
-    <p>We welcome feedback and inquiries from our audience. Feel free to reach out to us via our contact page for any
-        questions, suggestions, or support.</p>
-</div></div>
+                <h1>Archives</h1>
+                <div class="row">
+                    <div class="col-md-12">
+                        
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">August 2024</h5>
+                    <p class="card-text"><a href="post1.html">Introduction to Precision Agriculture</a><br><a href="post2.html">Understanding IoT in Smart Homes</a></p>
+                </div>
+            </div>
+        
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">September 2024</h5>
+                    <p class="card-text"><a href="post3.html">The Role of Artificial Intelligence in Healthcare</a></p>
+                </div>
+            </div>
+        
+                    </div>
+                </div>
             </div>
             
 <footer class="bg-dark text-white text-center py-4 mt-auto">

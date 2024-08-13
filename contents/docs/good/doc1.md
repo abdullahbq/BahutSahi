@@ -1,5 +1,5 @@
 ---
-title: "Introduction to the Project"
+title: "Introduction to the Good"
 date: 2024-08-13
 tags: [AI, Healthcare, Technology]
 description: "An overview of the project, its goals, and its main components."

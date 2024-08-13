@@ -7,11 +7,55 @@ const frontMatter = require('front-matter');
 const docsDir = path.join(__dirname, 'contents', 'docs');
 const blogDir = path.join(__dirname, 'contents', 'blog');
 const publicDir = path.join(__dirname, 'docs');
+const assetsDir = path.join(__dirname, 'assets');
 
 // Create public directory if it doesn't exist
 if (!fs.existsSync(publicDir)) {
     fs.mkdirSync(publicDir);
 }
+
+// Create directories in publicDir based on folders in docsDir
+function createDirectoriesFromDocs(docsDir, publicDir) {
+    const folders = fs.readdirSync(docsDir).filter(file => fs.statSync(path.join(docsDir, file)).isDirectory());
+
+    folders.forEach(folder => {
+        const publicFolderPath = path.join(publicDir, folder);
+
+        if (!fs.existsSync(publicFolderPath)) {
+            fs.mkdirSync(publicFolderPath);
+        }
+    });
+}
+
+// Create directories in publicDir
+createDirectoriesFromDocs(docsDir, publicDir);
+
+// Function to copy static assets
+function copyAssets(sourceDir, targetDir) {
+    if (!fs.existsSync(targetDir)) {
+        fs.mkdirSync(targetDir, { recursive: true });
+    }
+
+    const items = fs.readdirSync(sourceDir);
+
+    items.forEach(item => {
+        const sourcePath = path.join(sourceDir, item);
+        const targetPath = path.join(targetDir, item);
+
+        if (fs.statSync(sourcePath).isDirectory()) {
+            copyAssets(sourcePath, targetPath);
+        } else {
+            fs.copyFileSync(sourcePath, targetPath);
+        }
+    });
+}
+
+// Copy static assets
+copyAssets(path.join(assetsDir, 'css'), path.join(publicDir, 'css'));
+copyAssets(path.join(assetsDir, 'js'), path.join(publicDir, 'js'));
+copyAssets(path.join(assetsDir, 'images'), path.join(publicDir, 'images'));
+
+
 
 // Bootstrap Navbar HTML
 const navbar = `
@@ -78,12 +122,10 @@ const footer = `
         </div>
     </div>
 </footer>
-
 `;
 
-
 // Function to convert markdown to HTML with front matter
-function convertMarkdownToHTML(dir, outputDir, isDocumentation) {
+function convertMarkdownToBlogHTML(dir, outputDir, isDocumentation) {
     const files = fs.readdirSync(dir);
 
     files.forEach(file => {
@@ -95,22 +137,13 @@ function convertMarkdownToHTML(dir, outputDir, isDocumentation) {
 
         const htmlContent = marked(body);
 
-        const metadataSection = `
-        <div class="metadata">
-            <h1>${attributes.title}</h1>
-            <p><strong>Date:</strong> ${attributes.date}</p>
-            <p><strong>Tags:</strong> ${attributes.tags ? attributes.tags.join(', ') : 'No tags'}</p>
-            <p><strong>Description:</strong> ${attributes.description || 'No description'}</p>
-        </div>
-        `;
-
         const html = isDocumentation ? `
             <html>
             <head>
                 <title>${attributes.title}</title>
                 <link href="css/bootstrap.min.css" rel="stylesheet">
             </head>
-            <body class="d-flex flex-column min-vh-100">
+            <body>
                 <div>
                     <div>${htmlContent}</div>
                 </div>
@@ -123,13 +156,11 @@ function convertMarkdownToHTML(dir, outputDir, isDocumentation) {
                 <title>${attributes.title}</title>
                 <link href="css/bootstrap.min.css" rel="stylesheet">
             </head>
-            <body class="d-flex flex-column min-vh-100">
+            <body>
                 ${navbar}
-                <div class="container mt-4">                
-                    ${metadataSection}
+                <div class="container mt-4">
                     <div>${htmlContent}</div>
                 </div>
-                ${footer}
                 <script src="js/bootstrap.bundle.min.js"></script>
             </body>
             </html>
@@ -139,29 +170,84 @@ function convertMarkdownToHTML(dir, outputDir, isDocumentation) {
     });
 }
 
+// Function to convert Markdown to HTML and save it
+function convertMarkdownToHTML() {
+    const docsDir = path.join(__dirname, 'contents', 'docs');
+    const publicDir = path.join(__dirname, 'docs');
+
+    // Read all directories in the docsDir
+    fs.readdir(docsDir, (err, folders) => {
+        if (err) throw err;
+
+        folders.forEach(folder => {
+            const folderPath = path.join(docsDir, folder);
+            const publicFolderPath = path.join(publicDir, folder);
+
+            // Create folder in publicDir if it doesn't exist
+            if (!fs.existsSync(publicFolderPath)) {
+                fs.mkdirSync(publicFolderPath, { recursive: true });
+            }
+
+            // Read all Markdown files in the folder
+            fs.readdir(folderPath, (err, files) => {
+                if (err) throw err;
+
+                files.forEach(file => {
+                    if (path.extname(file) === '.md') {
+                        const filePath = path.join(folderPath, file);
+                        const publicFilePath = path.join(publicFolderPath, path.basename(file, '.md') + '.html');
+
+                        // Read Markdown file
+                        fs.readFile(filePath, 'utf8', (err, data) => {
+                            if (err) throw err;
+
+                            // Convert Markdown to HTML
+                            const html = marked(data);
+
+                            // Write HTML to the publicDir
+                            fs.writeFile(publicFilePath, html, (err) => {
+                                if (err) throw err;
+                            });
+                        });
+                    }
+                });
+            });
+        });
+    });
+}
+
 // Convert docs and blog markdown to HTML
 convertMarkdownToHTML(docsDir, publicDir, true); // true for documentation
-convertMarkdownToHTML(blogDir, publicDir, false); // false for blog posts
+convertMarkdownToBlogHTML(blogDir, publicDir, false); // false for blog posts
 
 // Generate the documentation page with a left sidebar and a content area
-function generateDocumentationPage(dir, outputFilePath) {
-    const files = fs.readdirSync(dir);
+function generateDocumentationPage(docsDir, outputFilePath) {
+    const folders = fs.readdirSync(docsDir).filter(file => fs.statSync(path.join(docsDir, file)).isDirectory());
 
-    let listItems = files.map(file => {
-        const filePath = path.join(dir, file);
-        const content = fs.readFileSync(filePath, 'utf-8');
-        const { attributes } = frontMatter(content);
-        const link = file.replace('.md', '.html');
+    let sidebarItems = folders.map(folder => {
+        const folderPath = path.join(docsDir, folder);
+        const files = fs.readdirSync(folderPath);
+
+        let fileItems = files.map(file => {
+            if (path.extname(file) === '.md') {
+                const filePath = path.join(folderPath, file);
+                const content = fs.readFileSync(filePath, 'utf-8');
+                const { attributes } = frontMatter(content);
+                const link = path.join(folder, file.replace('.md', '.html'));
+                return `<li><a href="${link}" class="doc-link" data-file="${link}">${attributes.title}</a></li>`;
+            }
+            return '';
+        }).join('');
 
         return `
-            <li class="list-group-item">
-                <a href="#" class="doc-link" data-file="${link}">${attributes.title}</a>
+            <li>
+                <span>${folder}</span>
+                <ul>
+                    ${fileItems}
+                </ul>
             </li>
         `;
     }).join('');
-
-    const firstFile = files.length > 0 ? files[0].replace('.md', '.html') : '';
-    const firstContent = firstFile ? marked(frontMatter(fs.readFileSync(path.join(dir, firstFile.replace('.html', '.md')), 'utf-8')).body) : '';
 
     const html = `
         <html>
@@ -178,32 +264,38 @@ function generateDocumentationPage(dir, outputFilePath) {
                     position: sticky;
                     top: 0;
                     overflow-y: auto;
+                    background-color: #f8f9fa;
+                    border-right: 1px solid #dee2e6;
                 }
                 .content {
                     width: 75%;
                     padding: 15px;
                 }
-                .list-group-item {
-                    cursor: pointer;
-                    transition: background-color 0.3s ease;
+                .tree ul {
+                    list-style-type: none;
+                    padding-left: 1em;
+                    position: relative;
                 }
-                .list-group-item:hover {
-                    background-color: #e9ecef;
+                .tree li {
+                    margin: 0.5em 0;
+                    position: relative;
                 }
-                .list-group-item a {
-                    text-decoration: none;
-                    color: #007bff;
+                .tree li:before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: -1em;
+                    width: 0.8em;
+                    height: 100%;
+                    border-left: 1px solid #000;
                 }
-                .list-group-item a:hover {
-                    text-decoration: none;
+                .tree li span {
+                    position: relative;
+                    padding-left: 1em;
                 }
-                .content-area {
-                    border: 1px solid #ddd;
-                    border-radius: 8px;
-                    padding: 15px;
-                    background-color: #ffffff;
+                .tree li ul {
+                    margin-left: 1em;
                 }
-                /* Responsive styles */
                 @media (max-width: 992px) {
                     .sidebar {
                         display: none;
@@ -225,36 +317,40 @@ function generateDocumentationPage(dir, outputFilePath) {
         <body class="d-flex flex-column min-vh-100">
             ${navbar}
             <div class="docs-container-fluid mt-4">
-                <div class="sidebar" id="sidebar">
+                <div class="sidebar tree" id="sidebar">
                     <h2>Documentation</h2>
-                    <ul class="list-group">
-                        ${listItems}
+                    <ul>
+                        ${sidebarItems}
                     </ul>
                 </div>
                 <div class="content">
-                    <div class="content-area" id="doc-content">
-                        ${firstContent}
+                    <div class="content-area">
+                        <p>Select a file to view its content.</p>
                     </div>
                 </div>
             </div>
             ${footer}
             <script src="js/bootstrap.bundle.min.js"></script>
             <script>
-                // Sidebar toggle for small screens
-                document.getElementById('toggle-sidebar').addEventListener('click', function() {
-                    document.getElementById('sidebar').classList.toggle('show');
-                });
+                document.addEventListener('DOMContentLoaded', function () {
+                    const docLinks = document.querySelectorAll('.doc-link');
+                    const contentArea = document.querySelector('.content-area');
 
-                document.querySelectorAll('.doc-link').forEach(link => {
-                    link.addEventListener('click', function(event) {
-                        event.preventDefault();
-                        const file = this.getAttribute('data-file');
-                        fetch(file)
-                            .then(response => response.text())
-                            .then(html => {
-                                const content = new DOMParser().parseFromString(html, 'text/html').querySelector('body').innerHTML;
-                                document.getElementById('doc-content').innerHTML = content;
-                            });
+                    docLinks.forEach(link => {
+                        link.addEventListener('click', function (event) {
+                            event.preventDefault();
+                            const file = this.getAttribute('data-file');
+
+                            fetch(file)
+                                .then(response => response.text())
+                                .then(data => {
+                                    contentArea.innerHTML = new DOMParser().parseFromString(data, 'text/html').body.innerHTML;
+                                });
+                        });
+                    });
+
+                    document.getElementById('toggle-sidebar').addEventListener('click', function () {
+                        document.getElementById('sidebar').classList.toggle('show');
                     });
                 });
             </script>

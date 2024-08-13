@@ -1,0 +1,231 @@
+<div><!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>InkredibleDoc | Wallpaper</title>
+    <link href="assets/css/fontawesome.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/mystyles.css" rel="stylesheet" type="text/css" />
+    <script src="assets/js/bootstrap.bundle.min.js" type="text/javascript" defer></script>
+    <script src="components/header.js" type="text/javascript" defer></script>
+    <script src="components/title.js" type="text/javascript" defer></script>
+    <script src="components/footer.js" type="text/javascript" defer></script>
+    <style>
+        canvas {
+            border: 1px solid #000;
+            display: block;
+            margin: auto;
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <header-component></header-component>
+    <title-component title="Wallpaper"></title-component>
+    <div class="container-fluid py-3 bg-primary bg-opacity-10">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label for="colorInput">Choose background color:</label>
+                        <input type="color" class="form-control" id="colorInput" value="#ffffff">
+                    </div>
+                    <div class="col-lg-6">
+                        <label for="fontColorInput">Choose font color:</label>
+                        <input type="color" class="form-control" id="fontColorInput" value="#000000">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sizeSelect">Select wallpaper size:</label>
+                    <select class="form-control" id="sizeSelect">
+                        <option value="hd">HD (1280x720)</option>
+                        <option value="fullhd">Full HD (1920x1080)</option>
+                        <option value="xfullhd">XFull HD (1920x1200)</option>
+                        <option value="2k">2K (2560x1440)</option>
+                        <option value="4k">4K (3840x2160)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fontSizeSlider">Font Size:</label>
+                    <input type="range" class="form-control" id="fontSizeSlider" min="10" max="500" value="50" step="2"
+                        oninput="updateFontSize(this.value)">
+                </div>
+                <div class="form-group">
+                    <label for="fontWeightSlider">Font Weight:</label>
+                    <input type="range" class="form-control" id="fontWeightSlider" min="100" max="900" value="400"
+                        step="100" oninput="updateFontWeight(this.value)">
+                </div>
+                <button class="btn btn-primary mt-3" onclick="changeBackgroundColor()">Random Color</button>
+                <button class="btn btn-success mt-3" onclick="generateWallpaper()">Generate</button>
+                <button class="btn btn-success mt-3" onclick="downloadWallpaper()">Download</button>
+            </div>
+            <div class="col-lg-8">
+                <div class="form-group">
+                    <label for="textInput">Enter text:</label>
+                    <textarea class="form-control" id="textInput" placeholder="Your text here"
+                        rows="2">InkredibleDoc</textarea>
+                </div>
+                <canvas id="wallpaperCanvas" class="mt-3" width="900" height="450"></canvas>
+            </div>
+        </div>
+    </div>
+    <footer-component></footer-component>
+    <script>
+        let fontSize = 80;
+        let fontWeight = 900;
+        const textPadding = 20;
+
+        function generateWallpaper() {
+            // Get user input
+            const inputText = document.getElementById('textInput').value;
+            const bgColor = document.getElementById('colorInput').value;
+            const fontColor = document.getElementById('fontColorInput').value;
+            const selectedSize = document.getElementById('sizeSelect').value;
+
+            // Get canvas context
+            const canvas = document.getElementById('wallpaperCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // Set canvas size based on the selected wallpaper size
+            const sizes = {
+                'hd': { width: 1280, height: 720 },
+                'fullhd': { width: 1920, height: 1080 },
+                'xfullhd': { width: 1920, height: 1200 },
+                '2k': { width: 2560, height: 1440 },
+                '4k': { width: 3840, height: 2160 },
+            };
+            canvas.width = sizes[selectedSize].width;
+            canvas.height = sizes[selectedSize].height;
+
+            // Set background color
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Add colorful circles (blobs) behind text
+            addColorfulCircles(ctx, 10);
+
+            // Set text properties
+            ctx.fillStyle = fontColor; // Text color
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.font = getFontStyle(fontSize, fontWeight);
+
+            // Split text into lines
+            const lines = getLines(ctx, inputText, canvas.width - 2 * textPadding); // Adjusted for padding
+
+            // Adjust font size to fit the canvas
+            while (calculateTotalHeight(lines, fontSize) > canvas.height - 2 * textPadding && fontSize > 10) {
+                fontSize -= 2;
+                ctx.font = getFontStyle(fontSize, fontWeight);
+            }
+
+            // Position text in the center with padding
+            const x = canvas.width / 2;
+            const y = canvas.height / 2 - calculateTotalHeight(lines, fontSize) / 2;
+
+            // Draw text on the canvas with padding
+            lines.forEach((line, index) => {
+                ctx.fillText(line, x, y + index * fontSize + textPadding);
+            });
+        }
+
+        function downloadWallpaper() {
+            const canvas = document.getElementById('wallpaperCanvas');
+            const dataURL = canvas.toDataURL('image/jpeg');
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'wallpaper.jpg';
+            link.click();
+        }
+
+        function getFontStyle(size, weight) {
+            return `${weight} ${size}px Arial`;
+        }
+
+        function getLines(ctx, text, maxWidth) {
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                const word = words[i];
+                const width = ctx.measureText(currentLine + ' ' + word).width;
+                if (width <= maxWidth) {
+                    currentLine += ' ' + word;
+                } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                }
+            }
+
+            lines.push(currentLine);
+            return lines;
+        }
+
+        function calculateTotalHeight(lines, fontSize) {
+            return lines.length * fontSize;
+        }
+
+        function updateFontSize(value) {
+            fontSize = parseInt(value, 10);
+            generateWallpaper();
+        }
+
+        function updateFontWeight(value) {
+            fontWeight = parseInt(value, 10);
+            generateWallpaper();
+        }
+
+        function changeBackgroundColor() {
+            const randomColor = getRandomColor();
+            document.getElementById('colorInput').value = randomColor;
+            generateWallpaper(); // Regenerate wallpaper with the new background color
+        }
+
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function getRandomSubtleColor() {
+            const min = 160; // Minimum RGB value for subtlety
+            const max = 240; // Maximum RGB value for subtlety
+
+            const r = Math.floor(Math.random() * (max - min + 1)) + min;
+            const g = Math.floor(Math.random() * (max - min + 1)) + min;
+            const b = Math.floor(Math.random() * (max - min + 1)) + min;
+
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function addColorfulCircles(ctx, count) {
+            for (let i = 0; i < count; i++) {
+                const x = Math.random() * ctx.canvas.width;
+                const y = Math.random() * ctx.canvas.height;
+                const radius = Math.random() * 200 + 50; // Random radius between 50 and 250
+                const color = getRandomSubtleColor();
+                drawCircle(ctx, x, y, radius, color);
+            }
+        }
+
+        function drawCircle(ctx, x, y, radius, color) {
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, 2 * Math.PI);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.closePath();
+        }
+    </script>
+
+</body>
+
+</html></div>

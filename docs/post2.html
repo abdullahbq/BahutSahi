@@ -1,49 +1,23 @@
-
-        <html>
-            <head>
-                <title>Understanding IoT in Smart Homes</title>
-                <link href="css/bootstrap.min.css" rel="stylesheet">
-            </head>
+            
+          <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Understanding IoT in Smart Homes</title>
+      <link href="assets/css/fontawesome.css" rel="stylesheet" type="text/css" />
+      <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+      <link href="assets/css/mystyles.css" rel="stylesheet" type="text/css" />
+      <script src="assets/js/bootstrap.bundle.min.js" type="text/javascript" defer></script>
+      <script src="components/header.js" type="text/javascript" defer></script>
+      <script src="components/title.js" type="text/javascript" defer></script>
+      <script src="components/footer.js" type="text/javascript" defer></script>
+    </head>
             <body>
-                
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">MyWebsite</a>        
-        <button class="btn btn-outline-light d-lg-none me-auto" id="toggle-sidebar">
-            <i class="bi bi-list"></i> Sidebar
-        </button>
-        <button class="btn btn-outline-light d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="bi bi-list"></i> Menu
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="documentation.html">Documentation</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="blog.html">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tags.html">Tags</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="archives.html">Archives</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="about.html">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="contact.html">Contact</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-                <div class="container mt-4">
+                <header-component showSearchButton></header-component>
+      <section class="blog-section bg-primary bg-opacity-10">
+        <title-component title="Understanding IoT in Smart Homes"></title-component>
+        <div class="container py-5">
                     <div><h1>Understanding IoT in Smart Homes</h1>
 <p>The Internet of Things (IoT) is at the forefront of transforming homes into smart homes. IoT devices such as smart thermostats, lights, and security cameras enable homeowners to monitor and control their environment remotely.</p>
 <h2>Main Features</h2>
@@ -56,7 +30,8 @@
 <p>As IoT technology continues to evolve, the potential for smart homes will expand, offering even greater convenience and efficiency.</p>
 </div>
                 </div>
-                <script src="js/bootstrap.bundle.min.js"></script>
+                </section>
+                <footer-component></footer-component>
             </body>
             </html>
             

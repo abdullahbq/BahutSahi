@@ -1,129 +1,71 @@
 
-        <html>
-        <head>
-            <title>Tags</title>
-            <link href="css/bootstrap.min.css" rel="stylesheet">
-            <style>
-                .card { border: 1px solid #ddd; border-radius: 8px; }
-                .card-title { font-weight: bold; }
-                .card-text a { text-decoration: none; }
-            </style>
-        </head>
-        <body class="d-flex flex-column min-vh-100">
-            
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">MyWebsite</a>        
-        <button class="btn btn-outline-light d-lg-none me-auto" id="toggle-sidebar">
-            <i class="bi bi-list"></i> Sidebar
-        </button>
-        <button class="btn btn-outline-light d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="bi bi-list"></i> Menu
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="documentation.html">Documentation</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="blog.html">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tags.html">Tags</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="archives.html">Archives</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="about.html">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="contact.html">Contact</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+        <!DOCTYPE html>
+<html lang="en">
 
-            <div class="container mt-4">
-                <h1>Tags</h1>
-                <div class="row">
-                    <div class="col-md-12">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>InkredibleDoc | Archives</title>
+  <link href="assets/css/fontawesome.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/mystyles.css" rel="stylesheet" type="text/css" />
+  <script src="assets/js/bootstrap.bundle.min.js" type="text/javascript" defer></script>
+  <script src="components/header.js" type="text/javascript" defer></script>
+  <script src="components/title.js" type="text/javascript" defer></script>
+  <script src="components/footer.js" type="text/javascript" defer></script>
+</head>
+        <body>
+            <header-component></header-component>
+                <section class="faq-section bg-primary bg-opacity-10">
+                    <title-component title="Tags"></title-component>
+                        <div class="container py-5">
                         
-            <div class="card mb-3">
+            <div class="card shadow border border-primary mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">Agriculture</h5>
+                    <h5 class="card-title fw-bold">Agriculture</h5>
                     <p class="card-text"><a href="post1.html">Introduction to Precision Agriculture</a></p>
                 </div>
             </div>
         
-            <div class="card mb-3">
+            <div class="card shadow border border-primary mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">Technology</h5>
+                    <h5 class="card-title fw-bold">Technology</h5>
                     <p class="card-text"><a href="post1.html">Introduction to Precision Agriculture</a><br><a href="post2.html">Understanding IoT in Smart Homes</a><br><a href="post3.html">The Role of Artificial Intelligence in Healthcare</a></p>
                 </div>
             </div>
         
-            <div class="card mb-3">
+            <div class="card shadow border border-primary mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">IoT</h5>
+                    <h5 class="card-title fw-bold">IoT</h5>
                     <p class="card-text"><a href="post1.html">Introduction to Precision Agriculture</a><br><a href="post2.html">Understanding IoT in Smart Homes</a></p>
                 </div>
             </div>
         
-            <div class="card mb-3">
+            <div class="card shadow border border-primary mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">Smart Homes</h5>
+                    <h5 class="card-title fw-bold">Smart Homes</h5>
                     <p class="card-text"><a href="post2.html">Understanding IoT in Smart Homes</a></p>
                 </div>
             </div>
         
-            <div class="card mb-3">
+            <div class="card shadow border border-primary mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">AI</h5>
+                    <h5 class="card-title fw-bold">AI</h5>
                     <p class="card-text"><a href="post3.html">The Role of Artificial Intelligence in Healthcare</a></p>
                 </div>
             </div>
         
-            <div class="card mb-3">
+            <div class="card shadow border border-primary mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">Healthcare</h5>
+                    <h5 class="card-title fw-bold">Healthcare</h5>
                     <p class="card-text"><a href="post3.html">The Role of Artificial Intelligence in Healthcare</a></p>
                 </div>
             </div>
         
-                    </div>
-                </div>
-            </div>
-            
-<footer class="bg-dark text-white text-center py-4 mt-auto">
-    <div class="container">
-        <p class="mb-2">&copy; 2024 MyWebsite. All rights reserved.</p>
-        <p class="mb-2">
-            <a href="contact.html" class="text-white me-3">Contact Us</a> |
-            <a href="about.html" class="text-white ms-3">About Us</a>
-        </p>
-        <div class="mb-3">
-            <a href="https://facebook.com" class="text-white me-2" target="_blank">
-                <i class="bi bi-facebook"></i>
-            </a>
-            <a href="https://twitter.com" class="text-white me-2" target="_blank">
-                <i class="bi bi-twitter"></i>
-            </a>
-            <a href="https://instagram.com" class="text-white me-2" target="_blank">
-                <i class="bi bi-instagram"></i>
-            </a>
-            <a href="https://linkedin.com" class="text-white" target="_blank">
-                <i class="bi bi-linkedin"></i>
-            </a>
-        </div>
-    </div>
-</footer>
-
-            <script src="js/bootstrap.bundle.min.js"></script>
+                       </div>
+                </section>
+            <footer-component></footer-component>
         </body>
         </html>
     

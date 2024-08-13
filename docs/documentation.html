@@ -1,28 +1,36 @@
 
-        <html>
-        <head>
-            <title>Documentation</title>
-            <link href="css/bootstrap.min.css" rel="stylesheet">
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>InkredibleDoc | Documentation</title>
+  <link href="assets/css/fontawesome.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/mystyles.css" rel="stylesheet" type="text/css" />
+  <script src="assets/js/bootstrap.bundle.min.js" type="text/javascript" defer></script>
+  <script src="components/header.js" type="text/javascript" defer></script>
+  <script src="components/title.js" type="text/javascript" defer></script>
+  <script src="components/footer.js" type="text/javascript" defer></script>
+</head>
             <style>
                 .docs-container-fluid {
                     display: flex;
                 }
                 .sidebar {
                     width: 25%;
-                    padding: 15px;
                     position: sticky;
                     top: 0;
                     overflow-y: auto;
-                    background-color: #f8f9fa;
-                    border-right: 1px solid #dee2e6;
                 }
                 .content {
                     width: 75%;
-                    padding: 15px;
                 }
                 .tree ul {
                     list-style-type: none;
-                    padding-left: 1em;
+                    padding-left: 0.5em;
                     position: relative;
                 }
                 .tree li {
@@ -36,20 +44,19 @@
                     left: -1em;
                     width: 0.8em;
                     height: 100%;
-                    border-left: 1px solid #000;
+                    border-left: 2px solid #000;
                 }
                 .tree li span {
                     position: relative;
                     padding-left: 1em;
                 }
                 .tree li ul {
-                    margin-left: 1em;
+                    margin-left: 0.5em;
                 }
                 @media (max-width: 992px) {
                     .sidebar {
                         display: none;
                         width: 100%;
-                        padding: 15px;
                     }
                     .docs-container-fluid {
                         flex-direction: column;
@@ -63,105 +70,45 @@
                 }
             </style>
         </head>
-        <body class="d-flex flex-column min-vh-100">
-            
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">MyWebsite</a>        
-        <button class="btn btn-outline-light d-lg-none me-auto" id="toggle-sidebar">
-            <i class="bi bi-list"></i> Sidebar
-        </button>
-        <button class="btn btn-outline-light d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="bi bi-list"></i> Menu
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="documentation.html">Documentation</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="blog.html">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tags.html">Tags</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="archives.html">Archives</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="about.html">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="contact.html">Contact</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-            <div class="docs-container-fluid mt-4">
-                <div class="sidebar tree" id="sidebar">
-                    <h2>Documentation</h2>
-                    <ul>
-                        
+        <body>
+            <header-component showToggleButton></header-component>
+                <section class="faq-section">                        
+                    <div class="docs-container-fluid">
+                        <div class="sidebar tree bg-info bg-opacity-10" id="sidebar">
+                        <title-component title="Topics"></title-component>
+                            <ul>
+                                
             <li>
-                <span>august</span>
+                <span class="fw-bold">AUGUST</span>
                 <ul>
                     <li><a href="august\advancements-in-artificial-intelligence.html" class="doc-link" data-file="august\advancements-in-artificial-intelligence.html">Advancements in Artificial Intelligence</a></li><li><a href="august\future-of-robotics.html" class="doc-link" data-file="august\future-of-robotics.html">The Future of Robotics</a></li><li><a href="august\introduction-to-quantum-computing.html" class="doc-link" data-file="august\introduction-to-quantum-computing.html">Introduction to Quantum Computing</a></li><li><a href="august\sustainable-technology-solutions.html" class="doc-link" data-file="august\sustainable-technology-solutions.html">Sustainable Technology Solutions</a></li>
                 </ul>
             </li>
         
             <li>
-                <span>good</span>
+                <span class="fw-bold">GOOD</span>
                 <ul>
                     <li><a href="good\doc1.html" class="doc-link" data-file="good\doc1.html">Introduction to the Good</a></li><li><a href="good\doc2.html" class="doc-link" data-file="good\doc2.html">Setup Guide</a></li><li><a href="good\doc3.html" class="doc-link" data-file="good\doc3.html">Usage Guide</a></li>
                 </ul>
             </li>
         
             <li>
-                <span>test</span>
+                <span class="fw-bold">TEST</span>
                 <ul>
                     <li><a href="test\doc1.html" class="doc-link" data-file="test\doc1.html">Introduction to the Dual</a></li><li><a href="test\doc2.html" class="doc-link" data-file="test\doc2.html">Setup Guide</a></li><li><a href="test\doc3.html" class="doc-link" data-file="test\doc3.html">Usage Guide</a></li>
                 </ul>
             </li>
         
-                    </ul>
-                </div>
-                <div class="content">
-                    <div class="content-area">
-                        <p>Select a file to view its content.</p>
+                            </ul>
+                        </div>                
+                        <div class="content bg-primary bg-opacity-10">
+                            <div class="content-area">
+                            <title-component title="Select a topic to view its content."></title-component>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            
-<footer class="bg-dark text-white text-center py-4 mt-auto">
-    <div class="container">
-        <p class="mb-2">&copy; 2024 MyWebsite. All rights reserved.</p>
-        <p class="mb-2">
-            <a href="contact.html" class="text-white me-3">Contact Us</a> |
-            <a href="about.html" class="text-white ms-3">About Us</a>
-        </p>
-        <div class="mb-3">
-            <a href="https://facebook.com" class="text-white me-2" target="_blank">
-                <i class="bi bi-facebook"></i>
-            </a>
-            <a href="https://twitter.com" class="text-white me-2" target="_blank">
-                <i class="bi bi-twitter"></i>
-            </a>
-            <a href="https://instagram.com" class="text-white me-2" target="_blank">
-                <i class="bi bi-instagram"></i>
-            </a>
-            <a href="https://linkedin.com" class="text-white" target="_blank">
-                <i class="bi bi-linkedin"></i>
-            </a>
-        </div>
-    </div>
-</footer>
-
-            <script src="js/bootstrap.bundle.min.js"></script>
+            </section>            
+            <footer-component></footer-component>
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const docLinks = document.querySelectorAll('.doc-link');
@@ -180,7 +127,7 @@
                         });
                     });
 
-                    document.getElementById('toggle-sidebar').addEventListener('click', function () {
+                    document.getElementById('toggleSidebarBtn').addEventListener('click', function () {
                         document.getElementById('sidebar').classList.toggle('show');
                     });
                 });

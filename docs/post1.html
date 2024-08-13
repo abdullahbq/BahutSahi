@@ -1,49 +1,23 @@
-
-        <html>
-            <head>
-                <title>Introduction to Precision Agriculture</title>
-                <link href="css/bootstrap.min.css" rel="stylesheet">
-            </head>
+            
+          <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Introduction to Precision Agriculture</title>
+      <link href="assets/css/fontawesome.css" rel="stylesheet" type="text/css" />
+      <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+      <link href="assets/css/mystyles.css" rel="stylesheet" type="text/css" />
+      <script src="assets/js/bootstrap.bundle.min.js" type="text/javascript" defer></script>
+      <script src="components/header.js" type="text/javascript" defer></script>
+      <script src="components/title.js" type="text/javascript" defer></script>
+      <script src="components/footer.js" type="text/javascript" defer></script>
+    </head>
             <body>
-                
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">MyWebsite</a>        
-        <button class="btn btn-outline-light d-lg-none me-auto" id="toggle-sidebar">
-            <i class="bi bi-list"></i> Sidebar
-        </button>
-        <button class="btn btn-outline-light d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="bi bi-list"></i> Menu
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="documentation.html">Documentation</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="blog.html">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tags.html">Tags</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="archives.html">Archives</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="about.html">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="contact.html">Contact</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-                <div class="container mt-4">
+                <header-component showSearchButton></header-component>
+      <section class="blog-section bg-primary bg-opacity-10">
+        <title-component title="Introduction to Precision Agriculture"></title-component>
+        <div class="container py-5">
                     <div><h1>Introduction to Precision Agriculture</h1>
 <p>Precision agriculture is a modern farming technique that uses technology to monitor and manage field variability in crops. By using GPS, sensors, and IoT devices, farmers can optimize the use of inputs such as water, fertilizers, and pesticides, leading to increased efficiency and reduced environmental impact.</p>
 <h2>Key Benefits</h2>
@@ -56,7 +30,8 @@
 <p>Precision agriculture is a vital tool in the quest for sustainable farming practices. With the continued advancement of technology, the future of farming looks promising.</p>
 </div>
                 </div>
-                <script src="js/bootstrap.bundle.min.js"></script>
+                </section>
+                <footer-component></footer-component>
             </body>
             </html>
             

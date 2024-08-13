@@ -50,82 +50,26 @@ function copyAssets(sourceDir, targetDir) {
     });
 }
 
+// Function to copy static assets files
+function copyAssetsFiles(sourcePath, destinationPath) {
+    fs.copyFile(sourcePath, destinationPath, (err) => {
+        if (err) {
+            throw new Error(`Failed to copy file from ${sourcePath} to ${destinationPath}: ${err.message}`);
+        }
+    });
+}
+
 // Copy static assets
-copyAssets(path.join(assetsDir, 'css'), path.join(publicDir, 'css'));
-copyAssets(path.join(assetsDir, 'js'), path.join(publicDir, 'js'));
-copyAssets(path.join(assetsDir, 'images'), path.join(publicDir, 'images'));
-
-
-
-// Bootstrap Navbar HTML
-const navbar = `
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">MyWebsite</a>        
-        <button class="btn btn-outline-light d-lg-none me-auto" id="toggle-sidebar">
-            <i class="bi bi-list"></i> Sidebar
-        </button>
-        <button class="btn btn-outline-light d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <i class="bi bi-list"></i> Menu
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="documentation.html">Documentation</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="blog.html">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="tags.html">Tags</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="archives.html">Archives</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="about.html">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="contact.html">Contact</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-`;
-
-// Bootstrap Footer HTML
-const footer = `
-<footer class="bg-dark text-white text-center py-4 mt-auto">
-    <div class="container">
-        <p class="mb-2">&copy; ${new Date().getFullYear()} MyWebsite. All rights reserved.</p>
-        <p class="mb-2">
-            <a href="contact.html" class="text-white me-3">Contact Us</a> |
-            <a href="about.html" class="text-white ms-3">About Us</a>
-        </p>
-        <div class="mb-3">
-            <a href="https://facebook.com" class="text-white me-2" target="_blank">
-                <i class="bi bi-facebook"></i>
-            </a>
-            <a href="https://twitter.com" class="text-white me-2" target="_blank">
-                <i class="bi bi-twitter"></i>
-            </a>
-            <a href="https://instagram.com" class="text-white me-2" target="_blank">
-                <i class="bi bi-instagram"></i>
-            </a>
-            <a href="https://linkedin.com" class="text-white" target="_blank">
-                <i class="bi bi-linkedin"></i>
-            </a>
-        </div>
-    </div>
-</footer>
-`;
+copyAssets(path.join(assetsDir, 'css'), path.join(publicDir, 'assets', 'css'));
+copyAssets(path.join(assetsDir, 'js'), path.join(publicDir, 'assets', 'js'));
+copyAssets(path.join(assetsDir, 'images'), path.join(publicDir, 'assets', 'images'));
+copyAssets(path.join(assetsDir, 'webfonts'), path.join(publicDir, 'assets', 'webfonts'));
+copyAssets(path.join(assetsDir, 'slides'), path.join(publicDir, 'assets', 'slides'));
+copyAssetsFiles(path.join(assetsDir, 'abdullahbq_resume.pdf'), path.join(publicDir, 'assets', 'abdullahbq_resume.pdf'));
+copyAssets(path.join(assetsDir, 'components'), path.join(publicDir, 'components'));
 
 // Function to convert markdown to HTML with front matter
-function convertMarkdownToBlogHTML(dir, outputDir, isDocumentation) {
+function convertMarkdownToBlogHTML(dir, outputDir) {
     const files = fs.readdirSync(dir);
 
     files.forEach(file => {
@@ -137,31 +81,30 @@ function convertMarkdownToBlogHTML(dir, outputDir, isDocumentation) {
 
         const htmlContent = marked(body);
 
-        const html = isDocumentation ? `
-            <html>
-            <head>
-                <title>${attributes.title}</title>
-                <link href="css/bootstrap.min.css" rel="stylesheet">
-            </head>
+        const html = `            
+          <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>${attributes.title}</title>
+      <link href="assets/css/fontawesome.css" rel="stylesheet" type="text/css" />
+      <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+      <link href="assets/css/mystyles.css" rel="stylesheet" type="text/css" />
+      <script src="assets/js/bootstrap.bundle.min.js" type="text/javascript" defer></script>
+      <script src="components/header.js" type="text/javascript" defer></script>
+      <script src="components/title.js" type="text/javascript" defer></script>
+      <script src="components/footer.js" type="text/javascript" defer></script>
+    </head>
             <body>
-                <div>
+                <header-component showSearchButton></header-component>
+      <section class="blog-section bg-primary bg-opacity-10">
+        <title-component title="${attributes.title}"></title-component>
+        <div class="container py-5">
                     <div>${htmlContent}</div>
                 </div>
-                <script src="js/bootstrap.bundle.min.js"></script>
-            </body>
-            </html>
-        ` : `
-        <html>
-            <head>
-                <title>${attributes.title}</title>
-                <link href="css/bootstrap.min.css" rel="stylesheet">
-            </head>
-            <body>
-                ${navbar}
-                <div class="container mt-4">
-                    <div>${htmlContent}</div>
-                </div>
-                <script src="js/bootstrap.bundle.min.js"></script>
+                </section>
+                <footer-component></footer-component>
             </body>
             </html>
             `;
@@ -201,11 +144,35 @@ function convertMarkdownToHTML() {
                         fs.readFile(filePath, 'utf8', (err, data) => {
                             if (err) throw err;
 
-                            // Convert Markdown to HTML
-                            const html = marked(data);
+                            // Extract front matter and Markdown body
+                            const { attributes, body } = frontMatter(data);
+                            const { title, tags, date, description } = attributes;
+
+                            // Convert Markdown body to HTML
+                            const html = marked(body);
+
+                            // Create front matter section
+                            const frontMatterHtml = `
+                                <div class="front-matter">
+                                    <title-component title="${title}"></title-component>
+                                    <div class="container-fluid py-3">
+                                    <p class="text-muted"><strong>Date:</strong> ${date}</p>
+                                    <p class="text-muted"><strong>Tags:</strong> ${tags ? tags.join(', ') : 'No Tags'}</p>
+                                    <p class="text-muted"><strong>Description:</strong> ${description}</p>
+                                    </div>
+                                </div>
+                            `;
+
+                            // Wrap the HTML content
+                            const wrappedHtml = `
+                                        ${frontMatterHtml}
+                                        <div class="container-fluid py-3">
+                                        ${html}
+                                        </div>
+                            `;
 
                             // Write HTML to the publicDir
-                            fs.writeFile(publicFilePath, html, (err) => {
+                            fs.writeFile(publicFilePath, wrappedHtml, (err) => {
                                 if (err) throw err;
                             });
                         });
@@ -217,8 +184,8 @@ function convertMarkdownToHTML() {
 }
 
 // Convert docs and blog markdown to HTML
-convertMarkdownToHTML(docsDir, publicDir, true); // true for documentation
-convertMarkdownToBlogHTML(blogDir, publicDir, false); // false for blog posts
+convertMarkdownToHTML(); // true for documentation
+convertMarkdownToBlogHTML(blogDir, publicDir); // false for blog posts
 
 // Generate the documentation page with a left sidebar and a content area
 function generateDocumentationPage(docsDir, outputFilePath) {
@@ -241,7 +208,7 @@ function generateDocumentationPage(docsDir, outputFilePath) {
 
         return `
             <li>
-                <span>${folder}</span>
+                <span class="fw-bold">${folder.toUpperCase()}</span>
                 <ul>
                     ${fileItems}
                 </ul>
@@ -250,30 +217,38 @@ function generateDocumentationPage(docsDir, outputFilePath) {
     }).join('');
 
     const html = `
-        <html>
-        <head>
-            <title>Documentation</title>
-            <link href="css/bootstrap.min.css" rel="stylesheet">
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>InkredibleDoc | Documentation</title>
+  <link href="assets/css/fontawesome.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/mystyles.css" rel="stylesheet" type="text/css" />
+  <script src="assets/js/bootstrap.bundle.min.js" type="text/javascript" defer></script>
+  <script src="components/header.js" type="text/javascript" defer></script>
+  <script src="components/title.js" type="text/javascript" defer></script>
+  <script src="components/footer.js" type="text/javascript" defer></script>
+</head>
             <style>
                 .docs-container-fluid {
                     display: flex;
                 }
                 .sidebar {
                     width: 25%;
-                    padding: 15px;
                     position: sticky;
                     top: 0;
                     overflow-y: auto;
-                    background-color: #f8f9fa;
-                    border-right: 1px solid #dee2e6;
                 }
                 .content {
                     width: 75%;
-                    padding: 15px;
                 }
                 .tree ul {
                     list-style-type: none;
-                    padding-left: 1em;
+                    padding-left: 0.5em;
                     position: relative;
                 }
                 .tree li {
@@ -287,20 +262,19 @@ function generateDocumentationPage(docsDir, outputFilePath) {
                     left: -1em;
                     width: 0.8em;
                     height: 100%;
-                    border-left: 1px solid #000;
+                    border-left: 2px solid #000;
                 }
                 .tree li span {
                     position: relative;
                     padding-left: 1em;
                 }
                 .tree li ul {
-                    margin-left: 1em;
+                    margin-left: 0.5em;
                 }
                 @media (max-width: 992px) {
                     .sidebar {
                         display: none;
                         width: 100%;
-                        padding: 15px;
                     }
                     .docs-container-fluid {
                         flex-direction: column;
@@ -314,23 +288,24 @@ function generateDocumentationPage(docsDir, outputFilePath) {
                 }
             </style>
         </head>
-        <body class="d-flex flex-column min-vh-100">
-            ${navbar}
-            <div class="docs-container-fluid mt-4">
-                <div class="sidebar tree" id="sidebar">
-                    <h2>Documentation</h2>
-                    <ul>
-                        ${sidebarItems}
-                    </ul>
-                </div>
-                <div class="content">
-                    <div class="content-area">
-                        <p>Select a file to view its content.</p>
+        <body>
+            <header-component showToggleButton></header-component>
+                <section class="faq-section">                        
+                    <div class="docs-container-fluid">
+                        <div class="sidebar tree bg-info bg-opacity-10" id="sidebar">
+                        <title-component title="Topics"></title-component>
+                            <ul>
+                                ${sidebarItems}
+                            </ul>
+                        </div>                
+                        <div class="content bg-primary bg-opacity-10">
+                            <div class="content-area">
+                            <title-component title="Select a topic to view its content."></title-component>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            ${footer}
-            <script src="js/bootstrap.bundle.min.js"></script>
+            </section>            
+            <footer-component></footer-component>
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const docLinks = document.querySelectorAll('.doc-link');
@@ -349,7 +324,7 @@ function generateDocumentationPage(docsDir, outputFilePath) {
                         });
                     });
 
-                    document.getElementById('toggle-sidebar').addEventListener('click', function () {
+                    document.getElementById('toggleSidebarBtn').addEventListener('click', function () {
                         document.getElementById('sidebar').classList.toggle('show');
                     });
                 });
@@ -376,10 +351,10 @@ function generateBlogPage(dir, outputFilePath, title) {
         const description = attributes.description ? `<p class="card-text">${attributes.description}</p>` : '';
 
         return `
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title"><a href="${link}">${attributes.title}</a></h5>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="card shadow border border-primary mb-4 h-100">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold"><a href="${link}">${attributes.title}</a></h5>
                         ${date}
                         ${tags}
                         ${description}
@@ -390,28 +365,32 @@ function generateBlogPage(dir, outputFilePath, title) {
     }).join('');
 
     const html = `
-        <html>
-        <head>
-            <title>${title}</title>
-            <link href="css/bootstrap.min.css" rel="stylesheet">
-            <style>
-                .card { border: 1px solid #ddd; border-radius: 8px; }
-                .card-title a { text-decoration: none; color: #007bff; }
-                .card-title a:hover { text-decoration: underline; }
-                .card-body { padding: 20px; }
-                .card-text { font-size: 0.9rem; }
-            </style>
-        </head>
-        <body class="d-flex flex-column min-vh-100">
-            ${navbar}
-            <div class="container mt-4">
-                <h1>${title}</h1>
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>InkredibleDoc | ${title}</title>
+  <link href="assets/css/fontawesome.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/mystyles.css" rel="stylesheet" type="text/css" />
+  <script src="assets/js/bootstrap.bundle.min.js" type="text/javascript" defer></script>
+  <script src="components/header.js" type="text/javascript" defer></script>
+  <script src="components/title.js" type="text/javascript" defer></script>
+  <script src="components/footer.js" type="text/javascript" defer></script>
+</head>
+        <body>
+            <header-component></header-component>
+                <section class="faq-section bg-primary bg-opacity-10">
+                    <title-component title="${title}"></title-component>
+                        <div class="container py-5">
                 <div class="row">
                     ${listItems}
                 </div>
-            </div>
-            ${footer}
-            <script src="js/bootstrap.bundle.min.js"></script>
+            </section>            
+            <footer-component></footer-component>
         </body>
         </html>
     `;
@@ -446,9 +425,9 @@ function generateTagsPage(dir, outputFilePath) {
     let tagListItems = Object.keys(tagsMap).map(tag => {
         const posts = tagsMap[tag].map(post => `<a href="${post.link}">${post.title}</a>`).join('<br>');
         return `
-            <div class="card mb-3">
+            <div class="card shadow border border-primary mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">${tag}</h5>
+                    <h5 class="card-title fw-bold">${tag}</h5>
                     <p class="card-text">${posts || 'No posts available.'}</p>
                 </div>
             </div>
@@ -456,28 +435,31 @@ function generateTagsPage(dir, outputFilePath) {
     }).join('');
 
     const html = `
-        <html>
-        <head>
-            <title>Tags</title>
-            <link href="css/bootstrap.min.css" rel="stylesheet">
-            <style>
-                .card { border: 1px solid #ddd; border-radius: 8px; }
-                .card-title { font-weight: bold; }
-                .card-text a { text-decoration: none; }
-            </style>
-        </head>
-        <body class="d-flex flex-column min-vh-100">
-            ${navbar}
-            <div class="container mt-4">
-                <h1>Tags</h1>
-                <div class="row">
-                    <div class="col-md-12">
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>InkredibleDoc | Archives</title>
+  <link href="assets/css/fontawesome.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/mystyles.css" rel="stylesheet" type="text/css" />
+  <script src="assets/js/bootstrap.bundle.min.js" type="text/javascript" defer></script>
+  <script src="components/header.js" type="text/javascript" defer></script>
+  <script src="components/title.js" type="text/javascript" defer></script>
+  <script src="components/footer.js" type="text/javascript" defer></script>
+</head>
+        <body>
+            <header-component></header-component>
+                <section class="faq-section bg-primary bg-opacity-10">
+                    <title-component title="Tags"></title-component>
+                        <div class="container py-5">
                         ${tagListItems || '<p>No tags available.</p>'}
-                    </div>
-                </div>
-            </div>
-            ${footer}
-            <script src="js/bootstrap.bundle.min.js"></script>
+                       </div>
+                </section>
+            <footer-component></footer-component>
         </body>
         </html>
     `;
@@ -515,9 +497,9 @@ function generateArchivesPage(dir, outputFilePath) {
 
         const posts = archivesMap[yearMonth].map(post => `<a href="${post.link}">${post.title}</a>`).join('<br>');
         return `
-            <div class="card mb-3">
+            <div class="card shadow border border-primary mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">${monthYearFormatted}</h5>
+                    <h5 class="card-title fw-bold">${monthYearFormatted}</h5>
                     <p class="card-text">${posts || 'No posts available.'}</p>
                 </div>
             </div>
@@ -525,28 +507,31 @@ function generateArchivesPage(dir, outputFilePath) {
     }).join('');
 
     const html = `
-        <html>
-        <head>
-            <title>Archives</title>
-            <link href="css/bootstrap.min.css" rel="stylesheet">
-            <style>
-                .card { border: 1px solid #ddd; border-radius: 8px; }
-                .card-title { font-weight: bold; }
-                .card-text a { text-decoration: none; }
-            </style>
-        </head>
-        <body class="d-flex flex-column min-vh-100">
-            ${navbar}
-            <div class="container mt-4">
-                <h1>Archives</h1>
-                <div class="row">
-                    <div class="col-md-12">
+        <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>InkredibleDoc | Archives</title>
+  <link href="assets/css/fontawesome.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="assets/css/mystyles.css" rel="stylesheet" type="text/css" />
+  <script src="assets/js/bootstrap.bundle.min.js" type="text/javascript" defer></script>
+  <script src="components/header.js" type="text/javascript" defer></script>
+  <script src="components/title.js" type="text/javascript" defer></script>
+  <script src="components/footer.js" type="text/javascript" defer></script>
+</head>
+        <body>
+            <header-component></header-component>
+                <section class="faq-section bg-primary bg-opacity-10">
+                    <title-component title="Archives"></title-component>
+                    <div class="container py-5">
                         ${archiveListItems || '<p>No archives available.</p>'}
                     </div>
-                </div>
-            </div>
-            ${footer}
-            <script src="js/bootstrap.bundle.min.js"></script>
+                </section>
+            <footer-component></footer-component>
         </body>
         </html>
     `;
@@ -555,7 +540,7 @@ function generateArchivesPage(dir, outputFilePath) {
 }
 
 // Function to generate static pages with larger content
-function generateStaticPage(title, contentPath, outputFilePath) {
+function generateStaticPage(contentPath, outputFilePath) {
     let content;
 
     // Check if contentPath is a file
@@ -565,36 +550,28 @@ function generateStaticPage(title, contentPath, outputFilePath) {
         content = contentPath; // Use the content directly if it's not a file
     }
 
-    const html = `
-        <html>
-        <head>
-            <title>${title}</title>
-            <link href="css/bootstrap.min.css" rel="stylesheet">
-        </head>
-        <body class="d-flex flex-column min-vh-100">
-            ${navbar}
-            <div class="container mt-4">
-                <h1>${title}</h1>
-                <div>${content}</div>
-            </div>
-            ${footer}
-            <script src="js/bootstrap.bundle.min.js"></script>
-        </body>
-        </html>
-    `;
+    const html = `<div>${content}</div>`;
 
     fs.writeFileSync(outputFilePath, html);
 }
 
-// Paths to the content files (adjust paths as needed)
-const homeContentPath = path.join(__dirname, 'contents', 'index.html');
-const aboutContentPath = path.join(__dirname, 'contents', 'about.html');
-const contactContentPath = path.join(__dirname, 'contents', 'contact.html');
+const paths = [
+    { src: 'index.html', dest: 'index.html' },
+    { src: 'about.html', dest: 'about.html' },
+    { src: 'publications.html', dest: 'publications.html' },
+    { src: 'contact.html', dest: 'contact.html' },
+    { src: 'gallery.html', dest: 'gallery.html' },
+    { src: 'services.html', dest: 'services.html' },
+    { src: 'slides.html', dest: 'slides.html' },
+    { src: 'wallpaper.html', dest: 'wallpaper.html' }
+];
 
-// Create About and Contact pages
-generateStaticPage('Home', homeContentPath, path.join(publicDir, 'index.html'));
-generateStaticPage('About Us', aboutContentPath, path.join(publicDir, 'about.html'));
-generateStaticPage('Contact Us', contactContentPath, path.join(publicDir, 'contact.html'));
+// Generate static pages
+paths.forEach(({ src, dest }) => {
+    const sourcePath = path.join(__dirname, 'contents', src);
+    const destinationPath = path.join(publicDir, dest);
+    generateStaticPage(sourcePath, destinationPath);
+});
 
 
 // Generate pages

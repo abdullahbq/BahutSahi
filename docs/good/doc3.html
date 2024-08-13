@@ -1,10 +1,624 @@
-<hr>
-<h2>title: &quot;Usage Guide&quot;
-date: 2024-08-13
-description: &quot;Detailed instructions on how to use the project, including command options and troubleshooting tips.&quot;</h2>
-<h1>Usage Guide</h1>
+
+                                        
+                                <div class="front-matter">
+                                    <title-component title="Usage Guide"></title-component>
+                                    <div class="container-fluid py-3">
+                                    <p class="text-muted"><strong>Date:</strong> Tue Aug 13 2024 05:30:00 GMT+0530 (India Standard Time)</p>
+                                    <p class="text-muted"><strong>Tags:</strong> No Tags</p>
+                                    <p class="text-muted"><strong>Description:</strong> Detailed instructions on how to use the project, including command options and troubleshooting tips.</p>
+                                    </div>
+                                </div>
+                            
+                                        <div class="container-fluid py-3">
+                                        <h1>Usage Guide</h1>
 <p>This guide provides detailed instructions on how to interact with the project and utilize its features.</p>
 <h2>Basic Usage</h2>
 <p>To start the project, run the following command:</p>
-<pre><code class="language-bash">npm start
+<pre><code class="language-bash">const fs = require(&#39;fs&#39;);
+const path = require(&#39;path&#39;);
+const { marked } = require(&#39;marked&#39;);
+const frontMatter = require(&#39;front-matter&#39;);
+
+// Directories
+const docsDir = path.join(__dirname, &#39;contents&#39;, &#39;docs&#39;);
+const blogDir = path.join(__dirname, &#39;contents&#39;, &#39;blog&#39;);
+const publicDir = path.join(__dirname, &#39;docs&#39;);
+const assetsDir = path.join(__dirname, &#39;assets&#39;);
+
+// Create public directory if it doesn&#39;t exist
+if (!fs.existsSync(publicDir)) {
+    fs.mkdirSync(publicDir);
+}
+
+// Create directories in publicDir based on folders in docsDir
+function createDirectoriesFromDocs(docsDir, publicDir) {
+    const folders = fs.readdirSync(docsDir).filter(file =&gt; fs.statSync(path.join(docsDir, file)).isDirectory());
+
+    folders.forEach(folder =&gt; {
+        const publicFolderPath = path.join(publicDir, folder);
+
+        if (!fs.existsSync(publicFolderPath)) {
+            fs.mkdirSync(publicFolderPath);
+        }
+    });
+}
+
+// Create directories in publicDir
+createDirectoriesFromDocs(docsDir, publicDir);
+
+// Function to copy static assets
+function copyAssets(sourceDir, targetDir) {
+    if (!fs.existsSync(targetDir)) {
+        fs.mkdirSync(targetDir, { recursive: true });
+    }
+
+    const items = fs.readdirSync(sourceDir);
+
+    items.forEach(item =&gt; {
+        const sourcePath = path.join(sourceDir, item);
+        const targetPath = path.join(targetDir, item);
+
+        if (fs.statSync(sourcePath).isDirectory()) {
+            copyAssets(sourcePath, targetPath);
+        } else {
+            fs.copyFileSync(sourcePath, targetPath);
+        }
+    });
+}
+
+// Copy static assets
+copyAssets(path.join(assetsDir, &#39;css&#39;), path.join(publicDir, &#39;css&#39;));
+copyAssets(path.join(assetsDir, &#39;js&#39;), path.join(publicDir, &#39;js&#39;));
+copyAssets(path.join(assetsDir, &#39;images&#39;), path.join(publicDir, &#39;images&#39;));
+
+
+
+// Bootstrap Navbar HTML
+const navbar = `
+&lt;nav class=&quot;navbar navbar-expand-lg navbar-dark bg-dark&quot;&gt;
+    &lt;div class=&quot;container-fluid&quot;&gt;
+        &lt;a class=&quot;navbar-brand&quot; href=&quot;index.html&quot;&gt;MyWebsite&lt;/a&gt;        
+        &lt;button class=&quot;btn btn-outline-light d-lg-none me-auto&quot; id=&quot;toggle-sidebar&quot;&gt;
+            &lt;i class=&quot;bi bi-list&quot;&gt;&lt;/i&gt; Sidebar
+        &lt;/button&gt;
+        &lt;button class=&quot;btn btn-outline-light d-lg-none&quot; type=&quot;button&quot; data-bs-toggle=&quot;collapse&quot; data-bs-target=&quot;#navbarNav&quot; aria-controls=&quot;navbarNav&quot; aria-expanded=&quot;false&quot; aria-label=&quot;Toggle navigation&quot;&gt;
+            &lt;i class=&quot;bi bi-list&quot;&gt;&lt;/i&gt; Menu
+        &lt;/button&gt;
+        &lt;div class=&quot;collapse navbar-collapse&quot; id=&quot;navbarNav&quot;&gt;
+            &lt;ul class=&quot;navbar-nav&quot;&gt;
+                &lt;li class=&quot;nav-item&quot;&gt;
+                    &lt;a class=&quot;nav-link&quot; href=&quot;index.html&quot;&gt;Home&lt;/a&gt;
+                &lt;/li&gt;
+                &lt;li class=&quot;nav-item&quot;&gt;
+                    &lt;a class=&quot;nav-link&quot; href=&quot;documentation.html&quot;&gt;Documentation&lt;/a&gt;
+                &lt;/li&gt;
+                &lt;li class=&quot;nav-item&quot;&gt;
+                    &lt;a class=&quot;nav-link&quot; href=&quot;blog.html&quot;&gt;Blog&lt;/a&gt;
+                &lt;/li&gt;
+                &lt;li class=&quot;nav-item&quot;&gt;
+                    &lt;a class=&quot;nav-link&quot; href=&quot;tags.html&quot;&gt;Tags&lt;/a&gt;
+                &lt;/li&gt;
+                &lt;li class=&quot;nav-item&quot;&gt;
+                    &lt;a class=&quot;nav-link&quot; href=&quot;archives.html&quot;&gt;Archives&lt;/a&gt;
+                &lt;/li&gt;
+                &lt;li class=&quot;nav-item&quot;&gt;
+                    &lt;a class=&quot;nav-link&quot; href=&quot;about.html&quot;&gt;About&lt;/a&gt;
+                &lt;/li&gt;
+                &lt;li class=&quot;nav-item&quot;&gt;
+                    &lt;a class=&quot;nav-link&quot; href=&quot;contact.html&quot;&gt;Contact&lt;/a&gt;
+                &lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/nav&gt;
+`;
+
+// Bootstrap Footer HTML
+const footer = `
+&lt;footer class=&quot;bg-dark text-white text-center py-4 mt-auto&quot;&gt;
+    &lt;div class=&quot;container&quot;&gt;
+        &lt;p class=&quot;mb-2&quot;&gt;&amp;copy; ${new Date().getFullYear()} MyWebsite. All rights reserved.&lt;/p&gt;
+        &lt;p class=&quot;mb-2&quot;&gt;
+            &lt;a href=&quot;contact.html&quot; class=&quot;text-white me-3&quot;&gt;Contact Us&lt;/a&gt; |
+            &lt;a href=&quot;about.html&quot; class=&quot;text-white ms-3&quot;&gt;About Us&lt;/a&gt;
+        &lt;/p&gt;
+        &lt;div class=&quot;mb-3&quot;&gt;
+            &lt;a href=&quot;https://facebook.com&quot; class=&quot;text-white me-2&quot; target=&quot;_blank&quot;&gt;
+                &lt;i class=&quot;bi bi-facebook&quot;&gt;&lt;/i&gt;
+            &lt;/a&gt;
+            &lt;a href=&quot;https://twitter.com&quot; class=&quot;text-white me-2&quot; target=&quot;_blank&quot;&gt;
+                &lt;i class=&quot;bi bi-twitter&quot;&gt;&lt;/i&gt;
+            &lt;/a&gt;
+            &lt;a href=&quot;https://instagram.com&quot; class=&quot;text-white me-2&quot; target=&quot;_blank&quot;&gt;
+                &lt;i class=&quot;bi bi-instagram&quot;&gt;&lt;/i&gt;
+            &lt;/a&gt;
+            &lt;a href=&quot;https://linkedin.com&quot; class=&quot;text-white&quot; target=&quot;_blank&quot;&gt;
+                &lt;i class=&quot;bi bi-linkedin&quot;&gt;&lt;/i&gt;
+            &lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/footer&gt;
+`;
+
+// Function to convert markdown to HTML with front matter
+function convertMarkdownToBlogHTML(dir, outputDir, isDocumentation) {
+    const files = fs.readdirSync(dir);
+
+    files.forEach(file =&gt; {
+        const filePath = path.join(dir, file);
+        const outputFilePath = path.join(outputDir, file.replace(&#39;.md&#39;, &#39;.html&#39;));
+
+        const content = fs.readFileSync(filePath, &#39;utf-8&#39;);
+        const { attributes, body } = frontMatter(content);
+
+        const htmlContent = marked(body);
+
+        const html = isDocumentation ? `
+            &lt;html&gt;
+            &lt;head&gt;
+                &lt;title&gt;${attributes.title}&lt;/title&gt;
+                &lt;link href=&quot;css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+            &lt;/head&gt;
+            &lt;body&gt;
+                &lt;div&gt;
+                    &lt;div&gt;${htmlContent}&lt;/div&gt;
+                &lt;/div&gt;
+                &lt;script src=&quot;js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
+            &lt;/body&gt;
+            &lt;/html&gt;
+        ` : `
+        &lt;html&gt;
+            &lt;head&gt;
+                &lt;title&gt;${attributes.title}&lt;/title&gt;
+                &lt;link href=&quot;css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+            &lt;/head&gt;
+            &lt;body&gt;
+                ${navbar}
+                &lt;div class=&quot;container mt-4&quot;&gt;
+                    &lt;div&gt;${htmlContent}&lt;/div&gt;
+                &lt;/div&gt;
+                &lt;script src=&quot;js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
+            &lt;/body&gt;
+            &lt;/html&gt;
+            `;
+
+        fs.writeFileSync(outputFilePath, html);
+    });
+}
+
+// Function to convert Markdown to HTML and save it
+function convertMarkdownToHTML() {
+    const docsDir = path.join(__dirname, &#39;contents&#39;, &#39;docs&#39;);
+    const publicDir = path.join(__dirname, &#39;docs&#39;);
+
+    // Read all directories in the docsDir
+    fs.readdir(docsDir, (err, folders) =&gt; {
+        if (err) throw err;
+
+        folders.forEach(folder =&gt; {
+            const folderPath = path.join(docsDir, folder);
+            const publicFolderPath = path.join(publicDir, folder);
+
+            // Create folder in publicDir if it doesn&#39;t exist
+            if (!fs.existsSync(publicFolderPath)) {
+                fs.mkdirSync(publicFolderPath, { recursive: true });
+            }
+
+            // Read all Markdown files in the folder
+            fs.readdir(folderPath, (err, files) =&gt; {
+                if (err) throw err;
+
+                files.forEach(file =&gt; {
+                    if (path.extname(file) === &#39;.md&#39;) {
+                        const filePath = path.join(folderPath, file);
+                        const publicFilePath = path.join(publicFolderPath, path.basename(file, &#39;.md&#39;) + &#39;.html&#39;);
+
+                        // Read Markdown file
+                        fs.readFile(filePath, &#39;utf8&#39;, (err, data) =&gt; {
+                            if (err) throw err;
+
+                            // Convert Markdown to HTML
+                            const html = marked(data);
+
+                            // Write HTML to the publicDir
+                            fs.writeFile(publicFilePath, html, (err) =&gt; {
+                                if (err) throw err;
+                            });
+                        });
+                    }
+                });
+            });
+        });
+    });
+}
+
+// Convert docs and blog markdown to HTML
+convertMarkdownToHTML(docsDir, publicDir, true); // true for documentation
+convertMarkdownToBlogHTML(blogDir, publicDir, false); // false for blog posts
+
+// Generate the documentation page with a left sidebar and a content area
+function generateDocumentationPage(docsDir, outputFilePath) {
+    const folders = fs.readdirSync(docsDir).filter(file =&gt; fs.statSync(path.join(docsDir, file)).isDirectory());
+
+    let sidebarItems = folders.map(folder =&gt; {
+        const folderPath = path.join(docsDir, folder);
+        const files = fs.readdirSync(folderPath);
+
+        let fileItems = files.map(file =&gt; {
+            if (path.extname(file) === &#39;.md&#39;) {
+                const filePath = path.join(folderPath, file);
+                const content = fs.readFileSync(filePath, &#39;utf-8&#39;);
+                const { attributes } = frontMatter(content);
+                const link = path.join(folder, file.replace(&#39;.md&#39;, &#39;.html&#39;));
+                return `&lt;li&gt;&lt;a href=&quot;${link}&quot; class=&quot;doc-link&quot; data-file=&quot;${link}&quot;&gt;${attributes.title}&lt;/a&gt;&lt;/li&gt;`;
+            }
+            return &#39;&#39;;
+        }).join(&#39;&#39;);
+
+        return `
+            &lt;li&gt;
+                &lt;span&gt;${folder}&lt;/span&gt;
+                &lt;ul&gt;
+                    ${fileItems}
+                &lt;/ul&gt;
+            &lt;/li&gt;
+        `;
+    }).join(&#39;&#39;);
+
+    const html = `
+        &lt;html&gt;
+        &lt;head&gt;
+            &lt;title&gt;Documentation&lt;/title&gt;
+            &lt;link href=&quot;css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+            &lt;style&gt;
+                .docs-container-fluid {
+                    display: flex;
+                }
+                .sidebar {
+                    width: 25%;
+                    padding: 15px;
+                    position: sticky;
+                    top: 0;
+                    overflow-y: auto;
+                    background-color: #f8f9fa;
+                    border-right: 1px solid #dee2e6;
+                }
+                .content {
+                    width: 75%;
+                    padding: 15px;
+                }
+                .tree ul {
+                    list-style-type: none;
+                    padding-left: 1em;
+                    position: relative;
+                }
+                .tree li {
+                    margin: 0.5em 0;
+                    position: relative;
+                }
+                .tree li:before {
+                    content: &quot;&quot;;
+                    position: absolute;
+                    top: 0;
+                    left: -1em;
+                    width: 0.8em;
+                    height: 100%;
+                    border-left: 1px solid #000;
+                }
+                .tree li span {
+                    position: relative;
+                    padding-left: 1em;
+                }
+                .tree li ul {
+                    margin-left: 1em;
+                }
+                @media (max-width: 992px) {
+                    .sidebar {
+                        display: none;
+                        width: 100%;
+                        padding: 15px;
+                    }
+                    .docs-container-fluid {
+                        flex-direction: column;
+                    }
+                    .content {
+                        width: 100%;
+                    }
+                }
+                .sidebar.show {
+                    display: block;
+                }
+            &lt;/style&gt;
+        &lt;/head&gt;
+        &lt;body class=&quot;d-flex flex-column min-vh-100&quot;&gt;
+            ${navbar}
+            &lt;div class=&quot;docs-container-fluid mt-4&quot;&gt;
+                &lt;div class=&quot;sidebar tree&quot; id=&quot;sidebar&quot;&gt;
+                    &lt;h2&gt;Documentation&lt;/h2&gt;
+                    &lt;ul&gt;
+                        ${sidebarItems}
+                    &lt;/ul&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;content&quot;&gt;
+                    &lt;div class=&quot;content-area&quot;&gt;
+                        &lt;p&gt;Select a file to view its content.&lt;/p&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            ${footer}
+            &lt;script src=&quot;js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
+            &lt;script&gt;
+                document.addEventListener(&#39;DOMContentLoaded&#39;, function () {
+                    const docLinks = document.querySelectorAll(&#39;.doc-link&#39;);
+                    const contentArea = document.querySelector(&#39;.content-area&#39;);
+
+                    docLinks.forEach(link =&gt; {
+                        link.addEventListener(&#39;click&#39;, function (event) {
+                            event.preventDefault();
+                            const file = this.getAttribute(&#39;data-file&#39;);
+
+                            fetch(file)
+                                .then(response =&gt; response.text())
+                                .then(data =&gt; {
+                                    contentArea.innerHTML = new DOMParser().parseFromString(data, &#39;text/html&#39;).body.innerHTML;
+                                });
+                        });
+                    });
+
+                    document.getElementById(&#39;toggle-sidebar&#39;).addEventListener(&#39;click&#39;, function () {
+                        document.getElementById(&#39;sidebar&#39;).classList.toggle(&#39;show&#39;);
+                    });
+                });
+            &lt;/script&gt;
+        &lt;/body&gt;
+        &lt;/html&gt;
+    `;
+
+    fs.writeFileSync(outputFilePath, html);
+}
+
+// Generate the blog page with a list of cards for each blog post
+function generateBlogPage(dir, outputFilePath, title) {
+    const files = fs.readdirSync(dir);
+
+    let listItems = files.map(file =&gt; {
+        const filePath = path.join(dir, file);
+        const content = fs.readFileSync(filePath, &#39;utf-8&#39;);
+        const { attributes } = frontMatter(content);
+        const link = file.replace(&#39;.md&#39;, &#39;.html&#39;);
+
+        const date = attributes.date ? `&lt;small class=&quot;text-muted&quot;&gt;Published on: ${new Date(attributes.date).toLocaleDateString()}&lt;/small&gt;` : &#39;&#39;;
+        const tags = attributes.tags ? `&lt;small class=&quot;text-muted&quot;&gt;Tags: ${attributes.tags.join(&#39;, &#39;)}&lt;/small&gt;` : &#39;&#39;;
+        const description = attributes.description ? `&lt;p class=&quot;card-text&quot;&gt;${attributes.description}&lt;/p&gt;` : &#39;&#39;;
+
+        return `
+            &lt;div class=&quot;col-md-4 mb-4&quot;&gt;
+                &lt;div class=&quot;card h-100&quot;&gt;
+                    &lt;div class=&quot;card-body&quot;&gt;
+                        &lt;h5 class=&quot;card-title&quot;&gt;&lt;a href=&quot;${link}&quot;&gt;${attributes.title}&lt;/a&gt;&lt;/h5&gt;
+                        ${date}
+                        ${tags}
+                        ${description}
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        `;
+    }).join(&#39;&#39;);
+
+    const html = `
+        &lt;html&gt;
+        &lt;head&gt;
+            &lt;title&gt;${title}&lt;/title&gt;
+            &lt;link href=&quot;css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+            &lt;style&gt;
+                .card { border: 1px solid #ddd; border-radius: 8px; }
+                .card-title a { text-decoration: none; color: #007bff; }
+                .card-title a:hover { text-decoration: underline; }
+                .card-body { padding: 20px; }
+                .card-text { font-size: 0.9rem; }
+            &lt;/style&gt;
+        &lt;/head&gt;
+        &lt;body class=&quot;d-flex flex-column min-vh-100&quot;&gt;
+            ${navbar}
+            &lt;div class=&quot;container mt-4&quot;&gt;
+                &lt;h1&gt;${title}&lt;/h1&gt;
+                &lt;div class=&quot;row&quot;&gt;
+                    ${listItems}
+                &lt;/div&gt;
+            &lt;/div&gt;
+            ${footer}
+            &lt;script src=&quot;js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
+        &lt;/body&gt;
+        &lt;/html&gt;
+    `;
+
+    fs.writeFileSync(outputFilePath, html);
+}
+
+
+// Generate the tags page
+function generateTagsPage(dir, outputFilePath) {
+    const files = fs.readdirSync(dir);
+    let tagsMap = {};
+
+    files.forEach(file =&gt; {
+        const filePath = path.join(dir, file);
+        const content = fs.readFileSync(filePath, &#39;utf-8&#39;);
+        const { attributes } = frontMatter(content);
+
+        if (attributes.tags) {
+            attributes.tags.forEach(tag =&gt; {
+                if (!tagsMap[tag]) {
+                    tagsMap[tag] = [];
+                }
+                tagsMap[tag].push({
+                    title: attributes.title,
+                    link: file.replace(&#39;.md&#39;, &#39;.html&#39;)
+                });
+            });
+        }
+    });
+
+    let tagListItems = Object.keys(tagsMap).map(tag =&gt; {
+        const posts = tagsMap[tag].map(post =&gt; `&lt;a href=&quot;${post.link}&quot;&gt;${post.title}&lt;/a&gt;`).join(&#39;&lt;br&gt;&#39;);
+        return `
+            &lt;div class=&quot;card mb-3&quot;&gt;
+                &lt;div class=&quot;card-body&quot;&gt;
+                    &lt;h5 class=&quot;card-title&quot;&gt;${tag}&lt;/h5&gt;
+                    &lt;p class=&quot;card-text&quot;&gt;${posts || &#39;No posts available.&#39;}&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        `;
+    }).join(&#39;&#39;);
+
+    const html = `
+        &lt;html&gt;
+        &lt;head&gt;
+            &lt;title&gt;Tags&lt;/title&gt;
+            &lt;link href=&quot;css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+            &lt;style&gt;
+                .card { border: 1px solid #ddd; border-radius: 8px; }
+                .card-title { font-weight: bold; }
+                .card-text a { text-decoration: none; }
+            &lt;/style&gt;
+        &lt;/head&gt;
+        &lt;body class=&quot;d-flex flex-column min-vh-100&quot;&gt;
+            ${navbar}
+            &lt;div class=&quot;container mt-4&quot;&gt;
+                &lt;h1&gt;Tags&lt;/h1&gt;
+                &lt;div class=&quot;row&quot;&gt;
+                    &lt;div class=&quot;col-md-12&quot;&gt;
+                        ${tagListItems || &#39;&lt;p&gt;No tags available.&lt;/p&gt;&#39;}
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            ${footer}
+            &lt;script src=&quot;js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
+        &lt;/body&gt;
+        &lt;/html&gt;
+    `;
+
+    fs.writeFileSync(outputFilePath, html);
+}
+
+// Generate the archives page
+function generateArchivesPage(dir, outputFilePath) {
+    const files = fs.readdirSync(dir);
+    let archivesMap = {};
+
+    files.forEach(file =&gt; {
+        const filePath = path.join(dir, file);
+        const content = fs.readFileSync(filePath, &#39;utf-8&#39;);
+        const { attributes } = frontMatter(content);
+
+        if (attributes.date) {
+            const dateString = attributes.date.toString();
+            const yearMonth = dateString.substring(0, 7);
+            if (!archivesMap[yearMonth]) {
+                archivesMap[yearMonth] = [];
+            }
+            archivesMap[yearMonth].push({
+                title: attributes.title,
+                link: file.replace(&#39;.md&#39;, &#39;.html&#39;)
+            });
+        }
+    });
+
+    let archiveListItems = Object.keys(archivesMap).sort().map(yearMonth =&gt; {
+        const [year, month] = yearMonth.split(&#39;-&#39;);
+        const monthName = new Date(`${year}-${month}-01`).toLocaleString(&#39;default&#39;, { month: &#39;long&#39; });
+        const monthYearFormatted = `${monthName} ${year}`;
+
+        const posts = archivesMap[yearMonth].map(post =&gt; `&lt;a href=&quot;${post.link}&quot;&gt;${post.title}&lt;/a&gt;`).join(&#39;&lt;br&gt;&#39;);
+        return `
+            &lt;div class=&quot;card mb-3&quot;&gt;
+                &lt;div class=&quot;card-body&quot;&gt;
+                    &lt;h5 class=&quot;card-title&quot;&gt;${monthYearFormatted}&lt;/h5&gt;
+                    &lt;p class=&quot;card-text&quot;&gt;${posts || &#39;No posts available.&#39;}&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        `;
+    }).join(&#39;&#39;);
+
+    const html = `
+        &lt;html&gt;
+        &lt;head&gt;
+            &lt;title&gt;Archives&lt;/title&gt;
+            &lt;link href=&quot;css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+            &lt;style&gt;
+                .card { border: 1px solid #ddd; border-radius: 8px; }
+                .card-title { font-weight: bold; }
+                .card-text a { text-decoration: none; }
+            &lt;/style&gt;
+        &lt;/head&gt;
+        &lt;body class=&quot;d-flex flex-column min-vh-100&quot;&gt;
+            ${navbar}
+            &lt;div class=&quot;container mt-4&quot;&gt;
+                &lt;h1&gt;Archives&lt;/h1&gt;
+                &lt;div class=&quot;row&quot;&gt;
+                    &lt;div class=&quot;col-md-12&quot;&gt;
+                        ${archiveListItems || &#39;&lt;p&gt;No archives available.&lt;/p&gt;&#39;}
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            ${footer}
+            &lt;script src=&quot;js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
+        &lt;/body&gt;
+        &lt;/html&gt;
+    `;
+
+    fs.writeFileSync(outputFilePath, html);
+}
+
+// Function to generate static pages with larger content
+function generateStaticPage(title, contentPath, outputFilePath) {
+    let content;
+
+    // Check if contentPath is a file
+    if (fs.existsSync(contentPath)) {
+        content = fs.readFileSync(contentPath, &#39;utf-8&#39;);
+    } else {
+        content = contentPath; // Use the content directly if it&#39;s not a file
+    }
+
+    const html = `
+        &lt;html&gt;
+        &lt;head&gt;
+            &lt;title&gt;${title}&lt;/title&gt;
+            &lt;link href=&quot;css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+        &lt;/head&gt;
+        &lt;body class=&quot;d-flex flex-column min-vh-100&quot;&gt;
+            ${navbar}
+            &lt;div class=&quot;container mt-4&quot;&gt;
+                &lt;h1&gt;${title}&lt;/h1&gt;
+                &lt;div&gt;${content}&lt;/div&gt;
+            &lt;/div&gt;
+            ${footer}
+            &lt;script src=&quot;js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
+        &lt;/body&gt;
+        &lt;/html&gt;
+    `;
+
+    fs.writeFileSync(outputFilePath, html);
+}
+
+// Paths to the content files (adjust paths as needed)
+const homeContentPath = path.join(__dirname, &#39;contents&#39;, &#39;index.html&#39;);
+const aboutContentPath = path.join(__dirname, &#39;contents&#39;, &#39;about.html&#39;);
+const contactContentPath = path.join(__dirname, &#39;contents&#39;, &#39;contact.html&#39;);
+
+// Create About and Contact pages
+generateStaticPage(&#39;Home&#39;, homeContentPath, path.join(publicDir, &#39;index.html&#39;));
+generateStaticPage(&#39;About Us&#39;, aboutContentPath, path.join(publicDir, &#39;about.html&#39;));
+generateStaticPage(&#39;Contact Us&#39;, contactContentPath, path.join(publicDir, &#39;contact.html&#39;));
+
+
+// Generate pages
+generateDocumentationPage(docsDir, path.join(publicDir, &#39;documentation.html&#39;), &#39;Documentation&#39;);
+generateBlogPage(blogDir, path.join(publicDir, &#39;blog.html&#39;), &#39;Blog&#39;);
+generateTagsPage(blogDir, path.join(publicDir, &#39;tags.html&#39;), &#39;Tags&#39;);
+generateArchivesPage(blogDir, path.join(publicDir, &#39;archives.html&#39;), &#39;Archives&#39;);
 </code></pre>
+
+                                        </div>
+                            

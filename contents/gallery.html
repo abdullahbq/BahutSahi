@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InkredibleDoc | Gallery</title>
+  <link href="assets/css/fontawesome.css" rel="stylesheet" type="text/css">
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="assets/css/mystyles.css" rel="stylesheet" type="text/css">
+  <script src="assets/js/bootstrap.bundle.min.js" type="text/javascript" defer></script>
+  <script src="components/header.js" type="text/javascript" defer></script>
+</head>
+
+<body>
+  <header-component></header-component>
+  <div class="gallery">
+    <div class="movable" id="imageContainer">
+      <!-- Images will be dynamically loaded here -->
+    </div>
+    <button class="prev">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <button class="next">
+      <i class="fas fa-arrow-right"></i>
+    </button>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // JSON data directly in the script
+      const jsonData = {
+        "images": [
+          "01",
+          "01",
+          "01",
+          "01",
+          "01",
+          "01",
+          "01",
+          "01",
+          "01",
+          "01",
+          "01"
+        ]
+      };
+
+      const movable = document.getElementById('imageContainer');
+      const images = jsonData.images;
+
+      // Create img elements based on JSON data
+      images.forEach(imageFilename => {
+        const imgElement = document.createElement('img');
+        imgElement.className = 'img-fluid';
+        imgElement.src = `assets/images/${imageFilename}.jpg`;
+        imgElement.alt = `InkredibleDoc ${imageFilename}`;
+        movable.appendChild(imgElement);
+      });
+      document.querySelectorAll('.gallery').forEach(function (gallery) {
+        const movable = gallery.querySelector('.movable');
+        const slides = Array.from(movable.children);
+        let currentIndex = 0;
+        let intervalId;
+
+        function updateGallery() {
+          movable.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        function play() {
+          intervalId = setInterval(() => {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateGallery();
+          }, 3000);
+        }
+
+        function stop() {
+          clearInterval(intervalId);
+        }
+
+        function navigate(direction) {
+          currentIndex = (currentIndex + direction + slides.length) % slides.length;
+          updateGallery();
+        }
+
+        gallery.addEventListener("mouseover", stop);
+        gallery.addEventListener("mouseout", play);
+
+        gallery.querySelector('.prev').addEventListener("click", () => navigate(-1));
+        gallery.querySelector('.next').addEventListener("click", () => navigate(1));
+
+        document.addEventListener("keydown", function (e) {
+          if (e.key === 'ArrowLeft') {
+            navigate(-1);
+          } else if (e.key === 'ArrowRight') {
+            navigate(1);
+          }
+        });
+
+        play(); // Start automatic sliding
+      });
+    });
+  </script>
+
+</body>
+
+</html>

@@ -550,7 +550,7 @@ function generateStaticPage(contentPath, outputFilePath) {
         content = contentPath; // Use the content directly if it's not a file
     }
 
-    const html = `<div>${content}</div>`;
+    const html = `${content}`;
 
     fs.writeFileSync(outputFilePath, html);
 }
